@@ -29,11 +29,11 @@ const watchHCSR04 = () => {
         } else {
             const endTick = tick;
             const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-            const distance = diff / 2 / MICROSECONDS_PER_CM;
+            var distance = diff / 2 / MICROSECONDS_PER_CM;
             
             // simply ignore the result if the value is weird
             if (distance > MAX_RANGE || distance < MIN_RANGE)
-                return;
+                distance = 2000.0;
 
             distanceQueue.push(distance);
             //console.log("-------------------------------------");

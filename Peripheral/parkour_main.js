@@ -4,7 +4,7 @@ var parkour_uuid = '980C2C3A-089F-46FE-9177-5DE28ADBCE06';
 
 // THRESHOLDS
 const ABRUPT_CHANGE_THRESHOLD = 50;
-const AVAILABLE_THRESHOLD = 140;
+const AVAILABLE_THRESHOLD = 200;
 
 var lastDistance = null;
 var availableParking = false;
@@ -61,22 +61,24 @@ bleno.on('advertisingStart', function(error) {
                                     lastDistance = curDistance;
                                     return;
                                 }
-                                
+                                distanceInfo["available"] = 2
                                 if (availableParking == false && curDistance - lastDistance > ABRUPT_CHANGE_THRESHOLD && curDistance > AVAILABLE_THRESHOLD) {
                                     availableParking = true;
-                                    distanceInfo["available"] = true;
+                                    distanceInfo["available"] = 0;
                                     console.log(distanceInfo);
                                     updateValueCallback(new Buffer(JSON.stringify(distanceInfo)));
                                 } else if (availableParking == true && lastDistance - curDistance > ABRUPT_CHANGE_THRESHOLD && curDistance < AVAILABLE_THRESHOLD) {
                                     availableParking = false;
-                                    distanceInfo["available"] = false;
+                                    distanceInfo["available"] = 1;
                                     console.log(distanceInfo);
                                     updateValueCallback(new Buffer(JSON.stringify(distanceInfo)));
                                 }
+                                else    
+                                    updateValueCallback(new Buffer(JSON.stringify(distanceInfo)));
                                 lastDistance = curDistance;
 
                                 // updateValueCallback(new Buffer(n));
-                            }, 25);
+                            }, 500);
                         },
                         
                         // If the client unsubscribes, we stop broadcasting the message
